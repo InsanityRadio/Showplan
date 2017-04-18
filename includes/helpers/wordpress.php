@@ -39,6 +39,14 @@ class Frontend {
 		return wp_cache_get ($a, $b);
 	}
 
+	public static function next_scheduled ($a) {
+		return wp_next_scheduled($a);
+	}
+
+	public static function schedule_event ($a, $b, $c) {
+		return wp_schedule_event($a, $b, $c);
+	}
+
 }
 
 abstract class List_Table extends \WP_List_Table {
