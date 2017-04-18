@@ -4,6 +4,10 @@ Showplan is a WordPress plugin for managing your radio station's schedule.
 
 It is in very early stages of development, but appears to work relatively stably. 
 
+## Installation
+
+The current beta can be installed by <a href="https://github.com/InsanityRadio/Showplan/archive/master.zip">downloading the tarball</a> of the project, and either uploading it to WordPress or extracting it in the plugins directory.
+
 ## Roadmap
 
 ### Now
