@@ -143,7 +143,7 @@ class Shows extends Controller {
 	public function post_edit () {
 
 		if (!\Showplan\Frontend::verify_nonce($_REQUEST['_wpnonce'], 'showplan_shows_edit')) {
-		 \Showplan\Frontend::die('Security fail!');
+		 \Showplan\Frontend::_die('Security fail!');
 		}
 
 		$this->update(Show::find($_GET['id']));
@@ -155,7 +155,7 @@ class Shows extends Controller {
 	public function post_create () {
 
 		if (!\Showplan\Frontend::verify_nonce($_REQUEST['_wpnonce'], 'showplan_shows_edit')) {
-		 \Showplan\Frontend::die('Security fail!');
+		 \Showplan\Frontend::_die('Security fail!');
 		}
 
 		$this->update(Show::create());
@@ -168,7 +168,7 @@ class Shows extends Controller {
 	public function post_delete () {
 
 		if (!\Showplan\Frontend::verify_nonce($_REQUEST['_wpnonce'], 'showplan_shows_delete')) {
-		 \Showplan\Frontend::die('Security fail!');
+		 \Showplan\Frontend::_die('Security fail!');
 		}
 
 		$_ids = $_POST['shows'];

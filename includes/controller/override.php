@@ -232,7 +232,7 @@ class Overrides extends Controller {
 				return $this->post_home_assign();
 
 			default:
-			 \Showplan\Frontend::die('Unrecognised action');
+			 \Showplan\Frontend::_die('Unrecognised action');
 		}
 
 	}
@@ -240,7 +240,7 @@ class Overrides extends Controller {
 	public function post_home_assign () {
 
 		if (!\Showplan\Frontend::verify_nonce($_REQUEST['_wpnonce'], 'showplan_override_edit')) {
-		 \Showplan\Frontend::die('Security fail!');
+		 \Showplan\Frontend::_die('Security fail!');
 		}
 
 		$_the_show = Show::find($_POST['show']['id']);
@@ -299,7 +299,7 @@ class Overrides extends Controller {
 	public function post_home_delete () {
 
 		if (!\Showplan\Frontend::verify_nonce($_REQUEST['_wpnonce'], 'showplan_template_delete')) {
-		 \Showplan\Frontend::die('Security fail!');
+		 \Showplan\Frontend::_die('Security fail!');
 		}
 
 		$_ids = explode(";", $_POST['ids']);

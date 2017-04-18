@@ -15,7 +15,7 @@ class Frontend {
 		return wp_nonce_field($name);
 	}
 
-	public static function die ($message) {
+	public static function _die ($message) {
 		return wp_die($message);
 	}
 

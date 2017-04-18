@@ -93,7 +93,7 @@ class Stations extends Controller {
 	public function post_edit () {
 
 		if (!\Showplan\Frontend::verify_nonce($_REQUEST['_wpnonce'], 'showplan_stations_edit')) {
-		 \Showplan\Frontend::die('Security fail!');
+		 \Showplan\Frontend::_die('Security fail!');
 		}
 
 		$this->update(Station::find($_GET['id']));
@@ -105,7 +105,7 @@ class Stations extends Controller {
 	public function post_create () {
 
 		if (!\Showplan\Frontend::verify_nonce($_REQUEST['_wpnonce'], 'showplan_stations_edit')) {
-		 \Showplan\Frontend::die('Security fail!');
+		 \Showplan\Frontend::_die('Security fail!');
 		}
 
 		$this->update(Station::create());
