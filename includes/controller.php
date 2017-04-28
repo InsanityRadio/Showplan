@@ -97,7 +97,7 @@ class Controller {
 		dbDelta($_query);
 
 		if (!sizeof(Category::all())) {
-			array_map(function ($a) { $wpdb->query($a); }, self::generate_default_data());
+			array_map(function ($a) use ($wpdb) { $wpdb->query($a); }, self::generate_default_data());
 		}
 
 		if (!\Showplan\Frontend::next_scheduled('showplan_compile_timetable')) {
