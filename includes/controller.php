@@ -95,8 +95,12 @@ class Controller {
 		$wpdb->query('SET sql_mode=\'NO_AUTO_VALUE_ON_ZERO\';');
 		dbDelta($_query);
 
+		if (!sizeof(Category::all())) {
+			array_map(function ($a) { $wpdb->query($a); }, self::generate_default_data());
+		}
+
 		if (!\Showplan\Frontend::next_scheduled('showplan_compile_timetable')) {
-		 \Showplan\Frontend::schedule_event(strtotime('midnight') + 86400, 'daily', 'showtime_compile_timetable');
+	 		\Showplan\Frontend::schedule_event(strtotime('midnight') + 86400, 'daily', 'showtime_compile_timetable');
 		}
 
 	}
@@ -182,7 +186,7 @@ class Controller {
 			id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			hour INT NOT NULL UNIQUE,
 			show_id INT NOT NULL REFERENCES `' . self::$prefix . 'shows`(`id`)
-				ON DELETE CASCADE ON UPDATE CASCADE,
+				ON DELETE CASCADE ON UPDATE CASCADE
 		);';
 
 		$_tables .= 'CREATE TABLE `' . self::$prefix . 'show_times` (
@@ -235,21 +239,21 @@ class Controller {
 
 	public static function generate_default_data () {
 
-		$_tables  = 'INSERT INTO `' . self::$prefix . 'categories` VALUES (0, "sustainer", "Sustainer", "Full Automation");';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'categories` VALUES (1, "chart", "Entertainment", "Entertainment");';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'categories` VALUES (2, "topic", "Topical", "Talk Show");';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'categories` VALUES (3, "specialist", "Specialist", "Specialist Music Show");';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'categories` VALUES (0, "sustainer", "Sustainer", "Full Automation");';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'categories` VALUES (1, "chart", "Entertainment", "Entertainment");';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'categories` VALUES (2, "topic", "Topical", "Talk Show");';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'categories` VALUES (3, "specialist", "Specialist", "Specialist Music Show");';
 
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'shows` VALUES (1, "Music Through The Night", "", "", 1, 0);';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'shows` VALUES (2, "Music Through The Morning", "", "", 1, 0);';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'shows` VALUES (3, "Music Through The Afternoon", "", "", 1, 0);';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'shows` VALUES (4, "Music Through The Evening", "", "", 1, 0);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (1, "Music Through The Night", "", "", 1, 0);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (2, "Music Through The Morning", "", "", 1, 0);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (3, "Music Through The Afternoon", "", "", 1, 0);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (4, "Music Through The Evening", "", "", 1, 0);';
 
 		// $_tables .= 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (4, 0, 1);';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (4, 5, 2);';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (4, 12, 3);';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (4, 17, 4);';
-		$_tables .= 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (4, 22, 1);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (1, 5, 2);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (2, 12, 3);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (3, 17, 4);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (4, 22, 1);';
 
 		return $_tables;
 	}
