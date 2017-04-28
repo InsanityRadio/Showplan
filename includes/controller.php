@@ -21,6 +21,7 @@ require_once 'models/station.php';
 require_once 'models/sustainer.php';
 require_once 'models/term.php';
 
+use \Showplan\Models\Category;
 use \Showplan\Models\Station;
 use \Showplan\Models\Term;
 use \Showplan\Frontend;
