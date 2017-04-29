@@ -12,6 +12,7 @@ require_once 'models/term.php';
 
 require_once 'compiler.php';
 
+use \Showplan\Compiler;
 use \Showplan\Models\CompiledTime;
 use \Showplan\Models\ShowTime;
 use \Showplan\Models\Station;
@@ -142,8 +143,10 @@ class Data {
 
 		$tz = new \DateTimeZone(get_option('timezone_string'));
 
+		$_now = Compiler::timestamp_to_future_localised(time(), $tz);
+
 		$_count = 3;
-		$_shows = [CompiledTime::get_show_at(time(), $station) ?: CompiledTime::sustainer(time(), null, false, $tz)];
+		$_shows = [CompiledTime::get_show_at($_now, $station) ?: CompiledTime::sustainer($_now, null, false, $tz)];
 
 		for ($i = 1; $i < $_count; $i++) {
 			$_last = end($_shows);
