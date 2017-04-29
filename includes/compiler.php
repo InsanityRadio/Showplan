@@ -87,7 +87,7 @@ class Compiler {
 	 */
 	public function compileDefaults () {
 
-		$_start = strtotime('last monday', time() + 86400);
+		$_start = strtotime('yesterday 00:00');
 		$_end = $_start + 86400*14;
 		$this->compile($_start, $_end);
 

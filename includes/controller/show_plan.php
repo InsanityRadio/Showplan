@@ -43,7 +43,7 @@ class ShowPlan extends Controller {
 		}
 
 		$_c = new Compiler(Station::find(1));
-		$_start = strtotime('last monday', time() + 86400);
+		$_start = strtotime('yesterday 00:00');
 		$_end = $_start + 86400*14;
 		$_c->compile($_start, $_end);
 
