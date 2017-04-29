@@ -126,7 +126,7 @@ class Overrides extends Controller {
 
 					<p>
 						<b>Category</b><br />
-						<select name="show[category]" id="showplan-tools-show-category">
+						<select name="show[category_id]" id="showplan-tools-show-category">
 <?php foreach ($_categories as $_cat): ?>
 							<option value="<?php echo esc_attr($_cat->id); ?>"><?php echo esc_html($_cat->name); ?></option>
 <?php endforeach; ?>
