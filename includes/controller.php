@@ -21,6 +21,7 @@ require_once 'models/station.php';
 require_once 'models/sustainer.php';
 require_once 'models/term.php';
 
+use \Showplan\Data;
 use \Showplan\Models\Category;
 use \Showplan\Models\Station;
 use \Showplan\Models\Term;
@@ -46,6 +47,9 @@ class Controller {
 		add_action('admin_menu', array('\Showplan\Controller', 'admin_menu'));
 		add_action('showtime_compile_timetable', array('\Showplan\Controller', 'compile'));
 		add_action('admin_enqueue_scripts', array('\Showplan\Controller', 'admin_link'));
+
+		$_data = new Data();
+		$_data->bootstrap();
 
 	}
 
@@ -245,10 +249,10 @@ class Controller {
 		$_tables[] = 'INSERT INTO `' . self::$prefix . 'categories` VALUES (2, "topic", "Topical", "Talk Show");';
 		$_tables[] = 'INSERT INTO `' . self::$prefix . 'categories` VALUES (3, "specialist", "Specialist", "Specialist Music Show");';
 
-		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (1, "Music Through The Night", "", "", 1, 0);';
-		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (2, "Music Through The Morning", "", "", 1, 0);';
-		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (3, "Music Through The Afternoon", "", "", 1, 0);';
-		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (4, "Music Through The Evening", "", "", 1, 0);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (1, "Music Through The Night", "", "", 1, "", 0);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (2, "Music Through The Morning", "", "", 1, "", 0);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (3, "Music Through The Afternoon", "", "", 1, "", 0);';
+		$_tables[] = 'INSERT INTO `' . self::$prefix . 'shows` VALUES (4, "Music Through The Evening", "", "", 1, "", 0);';
 
 		// $_tables .= 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (4, 0, 1);';
 		$_tables[] = 'INSERT INTO `' . self::$prefix . 'sustainers` VALUES (1, 5, 2);';

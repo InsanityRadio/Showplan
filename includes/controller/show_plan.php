@@ -43,7 +43,8 @@ class ShowPlan extends Controller {
 		}
 
 		$_c = new Compiler(Station::find(1));
-		$_c->compile(strtotime("April 3 2017 00:00 UTC"), strtotime("April 30 2017 00:00 UTC"));
+		$_yesterday = strtotime("yesterday 00:00");
+		$_c->compile($_yesterday, $_yesterday + 86400 * 14);
 
 		$this->render_home();
 
