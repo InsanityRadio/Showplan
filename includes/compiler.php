@@ -24,7 +24,7 @@ class Compiler {
 		}
 
 		$_transition = $timezone->getTransitions($utc_timestamp, $utc_timestamp);
-		return $utc_timestamp + $_transition[0]['offset'];
+		return $utc_timestamp - $_transition[0]['offset'];
 
 	}
 
@@ -35,6 +35,17 @@ class Compiler {
 	 * Useful for compensating live etc. if your server adjusts timezones. 
 	 */
 	public static function timestamp_to_localised ($utc_timestamp, $timezone) {
+
+		if (is_string($timezone)) {
+			$timezone = new DateTimeZone($timezone);
+		}
+
+		$_transition = $timezone->getTransitions(time(), time());
+		return $utc_timestamp - $_transition[0]['offset'];		
+
+	}
+
+	public static function invert_timestamp_localised ($utc_timestamp, $timezone) {
 
 		if (is_string($timezone)) {
 			$timezone = new DateTimeZone($timezone);

@@ -43,12 +43,18 @@ if (!defined('ABSPATH')) {
  */
 class Data {
 
+	public static function get_midnight () {
+		$_ts = Compiler::invert_timestamp_localised(time(), get_option('timezone_string'));
+		return $_ts - ($_ts % 86400);
+	}
+
 	public function get_schedule ($station, $days = 7, $sustainer = true) {
 
 		$_schedule = $this->get_guide($station);
 
-		// 00:00 UTC today
-		$_start = strtotime('today 00:00');
+		// Work out what day it is and get its start in GMT
+		// in BST, at 00:00, we should thus get 
+		$_start = self::get_midnight();
 		$_end = $_start + 86400 * $days;
 
 		$_result = [];
@@ -85,13 +91,14 @@ class Data {
 			\Showplan\Frontend::enqueue_style('showplan_front', plugins_url('css/tabs.css', dirname(__FILE__)));
 
 			$_schedule = $that->get_schedule($atts['station'], $atts['days'], $atts['sustainer']);
+			$_midnight = Data::get_midnight();
 
 			$_data = '<div class="showplan-schedule-container' . ($atts['images'] ? '' : ' no-images') . '">';
 			$_data .= '<table class="showplan-schedule-menu"><tr>';
 			$_days = [0];
 			foreach ($_schedule as $_day => $_shows) {
 
-				$_dow = $_day == strtotime('today 00:00') ? 'Today' : gmdate("D", $_day);
+				$_dow = $_day == $_midnight ? 'Today' : gmdate("D", $_day);
 
 				$_data .= '<td class="showplan-schedule-tab' . ($_dow == 'Today' ? ' today' : '') . '" for=".showplan-day-' . $_day . '">
 					<span>' . $_dow . '</span><br />
@@ -106,7 +113,7 @@ class Data {
 
 			foreach ($_schedule as $_day => $_shows) {
 
-				$_today = $_day == strtotime('today 00:00') ? ' today' : '';
+				$_today = $_day == $_midnight ? ' today' : '';
 				$_data .= '<div class="showplan-tab showplan-day-' . $_day . $_today . '">';
 
 				foreach ($_shows as $_show) {
