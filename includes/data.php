@@ -19,14 +19,18 @@ use \Showplan\Models\Station;
 // Init WordPress if we're including just this library. 
 if (!defined('ABSPATH')) {
 
-	// define('SHORTINIT', true);
+	define('SHORTINIT', true);
 	define('ABSPATH', dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/');
 
-	require_once ABSPATH . 'wp-blog-header.php';
+	require_once ABSPATH . 'wp-load.php';
 
-	// class Controller {
-	// 	public static $prefix;
-	// }
+	if ($_GET['site_id']) {
+		switch_to_blog($_GET['site_id']);
+	}
+
+	class Controller {
+		public static $prefix;
+	}
 
 	Controller::$prefix = $wpdb->prefix . 'showplan_';
 
