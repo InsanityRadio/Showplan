@@ -17,6 +17,8 @@ abstract class Controller {
 		$_type = $_SERVER['REQUEST_METHOD'] == 'POST' ? 'post' : 'render';
 		$_action = $this->get_action();
 
+		$_POST = array_map('stripslashes_deep', $_POST);
+
 		if (method_exists($this, $_type . '_' . $_action)) {
 			call_user_func(array($this, $_type . '_' . $_action));
 		} else {
