@@ -48,7 +48,7 @@ class Data {
 		$_schedule = $this->get_guide($station);
 
 		// 00:00 UTC today
-		$_start = time() - (time() % 86400);
+		$_start = strtotime('today 00:00');
 		$_end = $_start + 86400 * $days;
 
 		$_result = [];
@@ -91,7 +91,7 @@ class Data {
 			$_days = [0];
 			foreach ($_schedule as $_day => $_shows) {
 
-				$_dow = $_day == (time() - time() % 86400) ? 'Today' : gmdate("D", $_day);
+				$_dow = $_day == strtotime('today 00:00') ? 'Today' : gmdate("D", $_day);
 
 				$_data .= '<td class="showplan-schedule-tab' . ($_dow == 'Today' ? ' today' : '') . '" for=".showplan-day-' . $_day . '">
 					<span>' . $_dow . '</span><br />
@@ -106,7 +106,7 @@ class Data {
 
 			foreach ($_schedule as $_day => $_shows) {
 
-				$_today = $_day == (time() - time() % 86400) ? ' today' : '';
+				$_today = $_day == strtotime('today 00:00') ? ' today' : '';
 				$_data .= '<div class="showplan-tab showplan-day-' . $_day . $_today . '">';
 
 				foreach ($_shows as $_show) {
