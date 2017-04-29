@@ -90,30 +90,44 @@ class Data {
 			$_data .= '<table class="showplan-schedule-menu"><tr>';
 			$_days = [0];
 			foreach ($_schedule as $_day => $_shows) {
+
 				$_dow = $_day == (time() - time() % 86400) ? 'Today' : gmdate("D", $_day);
+
 				$_data .= '<td class="showplan-schedule-tab' . ($_dow == 'Today' ? ' today' : '') . '" for=".showplan-day-' . $_day . '">
 					<span>' . $_dow . '</span><br />
 					<span>' . gmdate("j M", $_day) . '</span>
 				</td>';
+
 			}
 
 			$_data .= '	</tr></table>';
 
 			$_data .= '<div class="showplan-tabs">';
+
 			foreach ($_schedule as $_day => $_shows) {
+
 				$_today = $_day == (time() - time() % 86400) ? ' today' : '';
 				$_data .= '<div class="showplan-tab showplan-day-' . $_day . $_today . '">';
+
 				foreach ($_shows as $_show) {
-					$_data .= '<table class="showplan-show"><tr><td>' . gmdate("H:i", $_show->start_time) . '<br /><span class="showplan-end-time">- ' . gmdate("H:i", $_show->end_time) . '</span></td>';
-					$_data .= '<td>a</td>';
-					$_data .= '<td>';
+					$_oa = ($_show->start_time <= time() && $_show->end_time > time());
+					$_data .= '<div class="showplan-show' . ($_oa ? ' showplan-on-air' : '') . '"><div>';
+					$_data .= '<div>' . gmdate("H:i", $_show->start_time) . '<span class="showplan-end-time">- ' . gmdate("H:i", $_show->end_time) . '</span>';
+					if ($_oa) {
+						$_data .= '<div class="showplan-on-air-indicator">ON AIR</div>';
+					}
+					$_data .= '</div>';
+					$_data .= '<div>a</div>';
+					$_data .= '<div>';
 					$_data .= '<h3>' . $_show->show->name . '</h3>';
 					$_data .= '<span>' . $_show->show->hosts . '</span>';
 					$_data .= '<p>' . $_show->show->description . '</p>';
-					$_data .= '</td>';
-					$_data .= '</tr></table>';
+					$_data .= '</div>';
+					$_data .= '</div></div>';
 				}
+
 				$_data .= '</div>';
+
 			}
 
 			$_data .= '</div></div>';
