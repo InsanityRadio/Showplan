@@ -44,9 +44,13 @@ The database is designed to allow non-complicated reading from anything capable 
 In WordPress you can access various data using short codes. Your theme needs to support shortcodes in widgets in order to use them in widgets.
 
 `[showplan-now-title station=1]` Current show title
+
 `[showplan-now-description station=1]` Current show description
+
 `[showplan-now-hosts station=1]` Current show hosts
+
 `[showplan-now-start station=1]` Current show start time (HH:II)
+
 `[showplan-now-end station=1]` Current show end time (HH:II)
 
 `[showplan-next-... station=1]` Same as above, but for the next show
