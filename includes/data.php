@@ -79,14 +79,14 @@ class Data {
 		}
 
 		add_shortcode( 'showplan-schedule', function ($atts) use ($that) {
-			$atts = shortcode_atts(array('station' => 1, 'days' => 7, 'sustainer' => 1), $atts);
+			$atts = shortcode_atts(array('station' => 1, 'days' => 7, 'sustainer' => 1, 'images' => 1), $atts);
 
 			\Showplan\Frontend::enqueue_script('showplan_front', plugins_url('js/tabs.js', dirname(__FILE__)), false);
 			\Showplan\Frontend::enqueue_style('showplan_front', plugins_url('css/tabs.css', dirname(__FILE__)));
 
 			$_schedule = $that->get_schedule($atts['station'], $atts['days'], $atts['sustainer']);
 
-			$_data = '<div class="showplan-schedule-container">';
+			$_data = '<div class="showplan-schedule-container' . ($atts['images'] ? '' : ' no-images') . '">';
 			$_data .= '<table class="showplan-schedule-menu"><tr>';
 			$_days = [0];
 			foreach ($_schedule as $_day => $_shows) {
@@ -117,7 +117,7 @@ class Data {
 						$_data .= '<div class="showplan-on-air-indicator">ON AIR</div>';
 					}
 					$_data .= '</div>';
-					$_data .= '<div>a</div>';
+					$_data .= '<div></div>';
 					$_data .= '<div>';
 					$_data .= '<h3>' . $_show->show->name . '</h3>';
 					$_data .= '<span>' . $_show->show->hosts . '</span>';
