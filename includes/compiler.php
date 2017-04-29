@@ -30,8 +30,8 @@ class Compiler {
 
 	/**
 	 * Takes a UTC timestamp and makes it appear exactly like it would now in a separate timezone.
-	 * For instance, if we're in BST takes strtotime(2017-01-01 00:00:00) and returns
-	 *   strtotime(2017-01-01 01:00:00), which would show as 00:00:00 BST.
+	 * For instance, if we're in BST takes strtotime(2017-01-02 00:00:00) and returns
+	 *   strtotime(2017-01-01 23:00:00), which would show as 00:00:00 BST.
 	 * Useful for compensating live etc. if your server adjusts timezones. 
 	 */
 	public static function timestamp_to_localised ($utc_timestamp, $timezone) {
