@@ -43,6 +43,32 @@ if (!defined('ABSPATH')) {
  */
 class Data {
 
+	public function get_schedule ($station, $days = 7, $sustainer = true) {
+
+		$_schedule = $this->get_guide($station);
+
+		// 00:00 UTC today
+		$_start = time() - (time() % 86400);
+		$_end = $_start + 86400 * $days;
+
+		$_result = [];
+
+		foreach ($_schedule as $_sch) {
+			if ($_sch->start_time < $_start
+					|| $_sch->start_time > $_end
+					|| (!$sustainer && $_sch->show->category_id == 0)) {
+				continue;
+			}
+			$_day = $_sch->start_time - ($_sch->start_time % 86400);
+			$_result[$_day][] = $_sch;
+		}
+
+		ksort($_result);
+
+		return $_result;
+
+	}
+
 	public function bootstrap () {
 		$that = $this;
 		function boot ($that) {
@@ -52,6 +78,47 @@ class Data {
 			}
 		}
 
+		add_shortcode( 'showplan-schedule', function ($atts) use ($that) {
+			$atts = shortcode_atts(array('station' => 1, 'days' => 7, 'sustainer' => 1), $atts);
+
+			\Showplan\Frontend::enqueue_script('showplan_front', plugins_url('js/tabs.js', dirname(__FILE__)), false);
+			\Showplan\Frontend::enqueue_style('showplan_front', plugins_url('css/tabs.css', dirname(__FILE__)));
+
+			$_schedule = $that->get_schedule($atts['station'], $atts['days'], $atts['sustainer']);
+
+			$_data = '<div class="showplan-schedule-container">';
+			$_data .= '<table class="showplan-schedule-menu"><tr>';
+			$_days = [0];
+			foreach ($_schedule as $_day => $_shows) {
+				$_dow = $_day == (time() - time() % 86400) ? 'Today' : gmdate("D", $_day);
+				$_data .= '<td class="showplan-schedule-tab' . ($_dow == 'Today' ? ' today' : '') . '" for=".showplan-day-' . $_day . '">
+					<span>' . $_dow . '</span><br />
+					<span>' . gmdate("j M", $_day) . '</span>
+				</td>';
+			}
+
+			$_data .= '	</tr></table>';
+
+			$_data .= '<div class="showplan-tabs">';
+			foreach ($_schedule as $_day => $_shows) {
+				$_today = $_day == (time() - time() % 86400) ? ' today' : '';
+				$_data .= '<div class="showplan-tab showplan-day-' . $_day . $_today . '">';
+				foreach ($_shows as $_show) {
+					$_data .= '<table class="showplan-show"><tr><td>' . gmdate("H:i", $_show->start_time) . '<br /><span class="showplan-end-time">- ' . gmdate("H:i", $_show->end_time) . '</span></td>';
+					$_data .= '<td>a</td>';
+					$_data .= '<td>';
+					$_data .= '<h3>' . $_show->show->name . '</h3>';
+					$_data .= '<span>' . $_show->show->hosts . '</span>';
+					$_data .= '<p>' . $_show->show->description . '</p>';
+					$_data .= '</td>';
+					$_data .= '</tr></table>';
+				}
+				$_data .= '</div>';
+			}
+
+			$_data .= '</div></div>';
+			return $_data;
+		});
 		// Ugh. 
 
 		add_shortcode( 'showplan-now-title', function ($atts) use ($that) {

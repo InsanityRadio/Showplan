@@ -1,0 +1,66 @@
+.showplan-schedule-container {
+	width: 100%;
+}
+
+
+.showplan-schedule-menu {
+	table-layout: fixed;
+	text-align: center;
+}
+
+.showplan-schedule-menu .showplan-schedule-tab {
+	font-size: 9pt;
+	transition: background 0.02s;
+	cursor: pointer;
+}
+
+.showplan-schedule-menu .showplan-schedule-tab:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.showplan-schedule-menu .showplan-schedule-tab.current {
+	background: #444;
+	color: #FFF;
+}
+
+.showplan-tab {
+	
+}
+
+.showplan-show {
+	table-layout: fixed;
+}
+
+.showplan-show td:nth-child(1) {
+	width: 5em;
+}
+
+.showplan-show td:nth-child(2) {
+	width: 100px;
+}
+
+.showplan-schedule-container.no-images .showplan-show td:nth-child(2) {
+	width: 0;
+	display: none;
+}
+
+.showplan-end-time {
+	color: #AAA;
+	font-size: 8pt;
+}
+
+.showplan-show h3 {
+	margin: 0;
+	padding: 0;
+	font-size: 12pt;
+	font-weight: 600;
+}
+
+.showplan-show h3 + span {
+	font-weight: 600;
+}
+
+.showplan-show h3 + span, .showplan-show p {
+	font-size: 10pt;
+}
+

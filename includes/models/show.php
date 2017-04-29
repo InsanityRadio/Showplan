@@ -37,6 +37,7 @@ class Show extends Model {
 		if ($public == 0 && $this->category_id == 0) {
 			throw new Exception('Sustainers must not be hidden');
 		}
+		$this->_data['public'] = $public ? 1 : 0;
 	}
 
 	public function set_category ($category) {

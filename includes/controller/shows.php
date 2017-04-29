@@ -135,7 +135,7 @@ class Shows extends Controller {
 		$show->description = trim($_POST['show']['description']);
 		$show->hosts = trim($_POST['show']['hosts']);
 		$show->category_id = (int) $_POST['show']['category_id'];
-		$show->public = !$_POST['show']['hidden'];
+		$show->public = $_POST['show']['hidden'] ? 0 : 1;
 		$show->one_liner = trim($_POST['show']['one_liner']);
 		$show->save();
 	}

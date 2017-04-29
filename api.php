@@ -10,7 +10,7 @@ $_data = new \Showplan\Data();
 
 $_result = null;
 
-if ($_station_id && $_method) {
+if ($_station_id && $_method && substr($_method, 0, 4) == 'get_') {
 
 	$_result = call_user_func_array(array($_data, $_method), [$_station_id]);
 
