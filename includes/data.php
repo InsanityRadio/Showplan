@@ -231,6 +231,7 @@ class Data {
 
 		$tz = new \DateTimeZone(get_option('timezone_string'));
 
+		// Strip our timezone, we don't care about it. 
 		$_now = Compiler::invert_timestamp_localised(time(), $tz);
 
 		$_count = 3;
