@@ -117,7 +117,7 @@ class Data {
 				$_data .= '<div class="showplan-tab showplan-day-' . $_day . $_today . '">';
 
 				foreach ($_shows as $_show) {
-					$_oa = ($_show->start_time <= time() && $_show->end_time > time());
+					$_oa = ($_show->start_time_local <= time() && $_show->end_time_local > time());
 					$_data .= '<div class="showplan-show' . ($_oa ? ' showplan-on-air' : '') . '"><div>';
 					$_data .= '<div>' . gmdate("H:i", $_show->start_time) . '<span class="showplan-end-time">- ' . gmdate("H:i", $_show->end_time) . '</span>';
 					if ($_oa) {
@@ -231,7 +231,7 @@ class Data {
 
 		$tz = new \DateTimeZone(get_option('timezone_string'));
 
-		$_now = Compiler::timestamp_to_future_localised(time(), $tz);
+		$_now = Compiler::invert_timestamp_localised(time(), $tz);
 
 		$_count = 3;
 		$_shows = [CompiledTime::get_show_at($_now, $station) ?: CompiledTime::sustainer($_now, null, false, $tz)];
