@@ -51,6 +51,10 @@ class Controller {
 		$_data = new Data();
 		$_data->bootstrap();
 
+		if (!\Showplan\Frontend::next_scheduled('showplan_compile_timetable')) {
+	 		\Showplan\Frontend::schedule_event(strtotime('midnight') + 86400, 'daily', 'showtime_compile_timetable');
+		}
+
 	}
 
 	public static function admin_link ($hook) {
@@ -102,10 +106,6 @@ class Controller {
 
 		if (!sizeof(Category::all())) {
 			array_map(function ($a) use ($wpdb) { $wpdb->query($a); }, self::generate_default_data());
-		}
-
-		if (!\Showplan\Frontend::next_scheduled('showplan_compile_timetable')) {
-	 		\Showplan\Frontend::schedule_event(strtotime('midnight') + 86400, 'daily', 'showtime_compile_timetable');
 		}
 
 	}

@@ -98,8 +98,8 @@ class Compiler {
 	 */
 	public function compileDefaults () {
 
-		$_start = strtotime('yesterday 00:00');
-		$_end = $_start + 86400*14;
+		$_start = strtotime('2 days ago 00:00 UTC');
+		$_end = $_start + 86400*16;
 		$this->compile($_start, $_end);
 
 	}
