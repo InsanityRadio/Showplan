@@ -43,8 +43,8 @@ class Frontend {
 		return wp_next_scheduled($a);
 	}
 
-	public static function schedule_event ($a, $b, $c) {
-		return wp_schedule_event($a, $b, $c);
+	public static function schedule_event ($a, $b, $c, $d = array()) {
+		return wp_schedule_event($a, $b, $c, $d);
 	}
 
 }

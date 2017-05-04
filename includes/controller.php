@@ -51,8 +51,9 @@ class Controller {
 		$_data = new Data();
 		$_data->bootstrap();
 
-		if (!\Showplan\Frontend::next_scheduled('showplan_compile_timetable')) {
-			\Showplan\Frontend::schedule_event(strtotime('00:00 UTC'), 'daily', 'showtime_compile_timetable');
+		$args = [false];
+		if (!\Showplan\Frontend::next_scheduled('showplan_compile_timetable', $args)) {
+			\Showplan\Frontend::schedule_event(strtotime('00:00 UTC'), 'daily', 'showtime_compile_timetable', $args);
 		}
 
 	}
