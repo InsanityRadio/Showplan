@@ -77,7 +77,7 @@ class Data {
 
 	public function bootstrap () {
 		$that = $this;
-		function boot ($that) {
+		function boot ($that, $atts) {
 			$atts = shortcode_atts(array('station' => 1), $atts);
 			if (!$that->_cache['upcoming']) {
 				$that->_cache['upcoming'] = $that->get_upcoming($atts['station']);
@@ -143,54 +143,54 @@ class Data {
 		// Ugh. 
 
 		add_shortcode( 'showplan-now-title', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return $that->_cache['upcoming'][0]->show->name;
 		});
 
 		add_shortcode( 'showplan-now-description', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return $that->_cache['upcoming'][0]->show->description;
 		});
 
 		add_shortcode( 'showplan-now-hosts', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return $that->_cache['upcoming'][0]->show->hosts;
 		});
 
 		add_shortcode( 'showplan-now-start', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return substr("00" . (($that->_cache['upcoming'][0]->start_time % 86400) / 3600 | 0), -2, 2) . ":00";
 		});
 
 		add_shortcode( 'showplan-now-end', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return substr("00" . (($that->_cache['upcoming'][0]->end_time % 86400) / 3600 | 0), -2, 2) . ":00";
 		});
 
 
 
 		add_shortcode( 'showplan-next-title', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return $that->_cache['upcoming'][1]->show->name;
 		});
 
 		add_shortcode( 'showplan-next-description', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return $that->_cache['upcoming'][1]->show->description;
 		});
 
 		add_shortcode( 'showplan-next-hosts', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return $that->_cache['upcoming'][1]->show->hosts;
 		});
 
 		add_shortcode( 'showplan-next-start', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return substr("00" . (($that->_cache['upcoming'][1]->start_time % 86400) / 3600 | 0), -2, 2) . ":00";
 		});
 
 		add_shortcode( 'showplan-next-end', function ($atts) use ($that) {
-			boot($that);
+			boot($that, $atts);
 			return substr("00" . (($that->_cache['upcoming'][1]->end_time % 86400) / 3600 | 0), -2, 2) . ":00";
 		});
 
