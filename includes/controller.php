@@ -52,7 +52,7 @@ class Controller {
 		$_data->bootstrap();
 
 		if (!\Showplan\Frontend::next_scheduled('showplan_compile_timetable')) {
-	 		\Showplan\Frontend::schedule_event(strtotime('midnight') + 86400, 'daily', 'showtime_compile_timetable');
+			\Showplan\Frontend::schedule_event(strtotime('00:00 UTC'), 'daily', 'showtime_compile_timetable');
 		}
 
 	}
