@@ -53,7 +53,8 @@ class Show extends Model {
 			'name' => $this->_data['name'],
 			'description' => $this->_data['description'],
 			'hosts' => $this->_data['hosts'],
-			'summary' => $this->_data['one_liner']
+			'summary' => $this->_data['one_liner'],
+			'category' => $this->category->reference
 		);
 
 	}	
