@@ -54,7 +54,7 @@ class Controller {
 
 		$args = [false];
 		if (!\Showplan\Frontend::next_scheduled('showplan_compile_timetable', $args)) {
-			\Showplan\Frontend::schedule_event(strtotime('00:00 UTC'), 'daily', 'showtime_compile_timetable', $args);
+			\Showplan\Frontend::schedule_event(strtotime('tomorrow 00:00 UTC'), 'daily', 'showtime_compile_timetable', $args);
 		}
 
 	}
