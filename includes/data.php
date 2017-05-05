@@ -118,7 +118,7 @@ class Data {
 
 				foreach ($_shows as $_show) {
 					$_oa = ($_show->start_time_local <= time() && $_show->end_time_local > time());
-					$_data .= '<div class="showplan-show' . ($_oa ? ' showplan-on-air' : '') . '"><div>';
+					$_data .= '<div class="showplan-show' . ($_oa ? ' showplan-on-air' : '') . ' showplan-category-' . ($_show->show->category_id) . '"><div>';
 					$_data .= '<div>' . gmdate("H:i", $_show->start_time) . '<span class="showplan-end-time">- ' . gmdate("H:i", $_show->end_time) . '</span>';
 					if ($_oa) {
 						$_data .= '<div class="showplan-on-air-indicator">ON AIR</div>';
