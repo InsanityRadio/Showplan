@@ -71,7 +71,6 @@ class Compiler {
 		global $wpdb;
 		// Wrap everything in a transaction to make sure that we don't hit any race conditions
 		$wpdb->query('START TRANSACTION;');
-
 		try {
 
 			$_terms = Term::open_between($start, $end);
@@ -113,7 +112,7 @@ class Compiler {
 		$_offset  = $_end - $_start;
 		$_hours = ceil($_offset / 3600);
 
-		$_cycles = ceil(ceil($_offset / 604800) / $term->total_weeks);
+		$_cycles = ceil(ceil(($term->end_time - $term->first_day) / 604800) / $term->total_weeks);
 
 		$_shows = [];
 
@@ -135,6 +134,7 @@ class Compiler {
 		$_expanded_shows = $_shows;
 
 		// 3. Copy the first cycle to create the other cycles
+
 		for ($c = 1; $c <= $_cycles; $c++) {
 			foreach ($_shows as $_show) {
 				$_copy = $_show[0]->make_copy($c * 604800);
@@ -150,7 +150,6 @@ class Compiler {
 
 		foreach ($_overrides as $_override) {
 
-			// var_dump([d($_override->start_time), d($_start), d($_override->end_time)]);
 			if ($_override->start_time < $_start || $_override->start_time > $_end) continue;
 
 			$_start_offset = $_override->start_offset = $_override->start_time - $term->first_day;
@@ -189,6 +188,7 @@ class Compiler {
 			}
 
 		}
+
 
 		return $this->commit_term($term, $_expanded_shows, $start, $end, $first_term);
 
