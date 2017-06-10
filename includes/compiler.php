@@ -97,8 +97,8 @@ class Compiler {
 	 */
 	public function compileDefaults () {
 
-		$_start = strtotime('2 days ago 00:00 UTC');
-		$_end = $_start + 86400*16;
+		$_start = strtotime('7 days ago 00:00 UTC');
+		$_end = $_start + 86400*21;
 		$this->compile($_start, $_end);
 
 	}
@@ -110,7 +110,7 @@ class Compiler {
 		$_end = max(604800 + $term->first_day, min($end, $term->end_time));
 
 		$_offset  = $_end - $_start;
-		$_hours = ceil($_offset / 3600);
+		$_hours = max(ceil($_offset / 3600), 168);
 
 		$_cycles = ceil(ceil(($term->end_time - $term->first_day) / 604800) / $term->total_weeks);
 
@@ -142,6 +142,7 @@ class Compiler {
 			}
 		}
 
+
 		// 4. Insert overrides
 		$_overrides = Override::where('station_id', $term->station->id)->get();
 
@@ -153,11 +154,11 @@ class Compiler {
 			if ($_override->start_time < $_start || $_override->start_time > $_end) continue;
 
 			$_start_offset = $_override->start_offset = $_override->start_time - $term->first_day;
-			$_expanded_shows[$_start_offset] = array($_override, $_override->length);
+			$_expanded_shows[$_start_offset] = array($_override, $_override->length * 60);
 
 			// Delete anything between the time periods
 			foreach ($_keys as $_key) {
-				if ($_key > $_start_offset && $_key < ($_start_offset + $_override->length)) {
+				if ($_key > $_start_offset && $_key < ($_start_offset + $_override->length * 60)) {
 					unset($_expanded_shows[$_key]);
 				}
 			}
@@ -180,15 +181,13 @@ class Compiler {
 			$_key = $_keys[$i];
 			$_value = &$_expanded_shows[$_key];
 
-
 			if ($i == sizeof($_keys) - 1) {
-				$_value[0]->length = 86400 - ($_value[0]->start_offset % 86400);
+				$_value[0]->length = (86400 - ($_value[0]->start_offset % 86400)) / 60;
 			} else {
-				$_value[0]->length = $_keys[$i + 1] - $_value[0]->start_offset;
+				$_value[0]->length = ($_keys[$i + 1] - $_value[0]->start_offset) / 60;
 			}
 
 		}
-
 
 		return $this->commit_term($term, $_expanded_shows, $start, $end, $first_term);
 
@@ -245,7 +244,7 @@ class Compiler {
 		$_comp->station_id = $term->station_id;
 
 		$_comp->start_time = $start_time;
-		$_comp->end_time = $start_time + $length;
+		$_comp->end_time = $start_time + $length * 60;
 
 		$_comp->start_time_local = self::timestamp_to_future_localised($_comp->start_time, $tz);
 		$_comp->end_time_local = self::timestamp_to_future_localised($_comp->end_time, $tz);
