@@ -131,6 +131,8 @@ class Compiler {
 			}
 		}
 
+		ksort($_shows);
+
 		$_expanded_shows = $_shows;
 
 		// 3. Copy the first cycle to create the other cycles
@@ -158,7 +160,7 @@ class Compiler {
 
 			// Delete anything between the time periods
 			foreach ($_keys as $_key) {
-				if ($_key > $_start_offset && $_key < ($_start_offset + $_override->length * 60)) {
+				if ($_key > $_start_offset && $_key < ($_start_offset + $_override->length)) {
 					unset($_expanded_shows[$_key]);
 				}
 			}
