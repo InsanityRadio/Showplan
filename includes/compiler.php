@@ -167,6 +167,8 @@ class Compiler {
 
 		}
 
+		ksort($_expanded_shows);
+
 		// 5. Collapse for a second time
 		foreach ($_expanded_shows as $_show) {
 			if ($_expanded_shows[$_show[0]->end_offset] && $_expanded_shows[$_show[0]->end_offset][0]->show_id == $_show[0]->show_id) {
