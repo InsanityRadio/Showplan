@@ -2,11 +2,21 @@
 
 Showplan is a WordPress plugin for managing your radio station's schedule.
 
-It is in very early stages of development, but appears to work relatively stably. 
+This is not a mature product. The current release (0.1) is considered an alpha, and we can't guarantee it'll work without issues.
 
 ## Installation
 
 The current beta can be installed by <a href="https://github.com/InsanityRadio/Showplan/archive/master.zip">downloading the tarball</a> of the project, and either uploading it to WordPress or extracting it in the plugins directory.
+
+Showplan needs to run on PHP 5.6 (might work on 5.5, but untested). Older PHP versions are no longer supported, so it's probably worth updating your web server if you are running anything less. 
+
+Once you've activated the plugin, click "Terms" in the Showplan menu, and create a new one. Showplan is designed for stations (like Insanity) who's schedule completely changes every few months. If this is not what you want, enter start and end dates (format YYYY-MM-DD works best)  like 1970-01-01 to 2100-01-01.
+
+You can now edit the Schedule Template to set up your regular schedule. You can make weekly changes through Overrides. 
+
+Changes to the calendars won't show up on the website until you click Publish - this allows you to stage multiple changes at once without making them public and breaking your live schedule. Changes to show information (titles, descriptions) will update immediately, however. 
+
+Add some shortcode to your schedule page. See API below for a full list.
 
 ## Roadmap
 
@@ -31,6 +41,7 @@ The current beta can be installed by <a href="https://github.com/InsanityRadio/S
 ### Later
 
 * Terms of more than one week (ie. week A/B)
+* Show Images and/or Pages
 * More API calls
 
 ## API
