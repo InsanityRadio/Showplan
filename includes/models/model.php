@@ -15,9 +15,14 @@ abstract class Model implements \JsonSerializable {
 		$this->_data = $_row;
 	}
 
+	public static function database () {
+		global $wpdb;
+		return $wpdb;
+	}
+
 	public static function find ($key) {
 
-		global $wpdb;
+		$wpdb = static::database();
 
 		$_row = $wpdb->get_row(
 			$wpdb->prepare('SELECT * FROM `' . Controller::$prefix . static::$table_name . '` WHERE id = %d;', $key),
@@ -40,7 +45,7 @@ abstract class Model implements \JsonSerializable {
 
 	public static function all () {
 
-		global $wpdb;
+		$wpdb = static::database();
 
 		$_rows = $wpdb->get_results('SELECT * FROM `' . Controller::$prefix . static::$table_name . '`;', 'ARRAY_A');
 
@@ -57,7 +62,7 @@ abstract class Model implements \JsonSerializable {
 
 	public function save () {
 
-		global $wpdb;
+		$wpdb = static::database();
 		$table = Controller::$prefix . static::$table_name;
 
 		$_data = array_intersect_key($this->_data, array_flip(static::$columns));
@@ -73,7 +78,7 @@ abstract class Model implements \JsonSerializable {
 
 	public function remove () {
 
-		global $wpdb;
+		$wpdb = static::database();
 		if ($this->id == NULL) {
 			return;
 		}
