@@ -43,9 +43,9 @@ if (!defined('ABSPATH')) {
  */
 class Data {
 
-	public static function get_midnight () {
+	public static function get_midnight ($opposite_days = 0) {
 		$_ts = Compiler::invert_timestamp_localised(time(), get_option('timezone_string'));
-		return $_ts - ($_ts % 86400);
+		return $_ts - ($_ts % 86400) - 86400 * $opposite_days;
 	}
 
 	public function get_schedule ($station, $days = 7, $sustainer = true) {
@@ -54,7 +54,7 @@ class Data {
 
 		// Work out what day it is and get its start in GMT
 		// in BST, at 00:00, we should thus get 
-		$_start = self::get_midnight();
+		$_start = self::get_midnight(3);
 		$_end = $_start + 86400 * $days;
 
 		$_result = [];
@@ -85,7 +85,7 @@ class Data {
 		}
 
 		add_shortcode( 'showplan-schedule', function ($atts) use ($that) {
-			$atts = shortcode_atts(array('station' => 1, 'days' => 7, 'sustainer' => 1, 'images' => 1), $atts);
+			$atts = shortcode_atts(array('station' => 1, 'days' => 10, 'sustainer' => 1, 'images' => 1), $atts);
 
 			\Showplan\Frontend::enqueue_script('showplan_front', plugins_url('js/tabs.js', dirname(__FILE__)), false);
 			\Showplan\Frontend::enqueue_style('showplan_front', plugins_url('css/tabs.css', dirname(__FILE__)));
@@ -118,7 +118,7 @@ class Data {
 
 				foreach ($_shows as $_show) {
 					$_oa = ($_show->start_time_local <= time() && $_show->end_time_local > time());
-					$_data .= '<div class="showplan-show' . ($_oa ? ' showplan-on-air' : '') . ' showplan-category-' . ($_show->show->category_id) . '"><div>';
+					$_data .= '<div data-start-time="' . $_show->start_time . '" data-end-time="' . $_show->end_time . '" class="showplan-show' . ($_oa ? ' showplan-on-air' : '') . ' showplan-category-' . ($_show->show->category_id) . '"><div>';
 					$_data .= '<div>' . gmdate("H:i", $_show->start_time) . '<span class="showplan-end-time">- ' . gmdate("H:i", $_show->end_time) . '</span>';
 					if ($_oa) {
 						$_data .= '<div class="showplan-on-air-indicator">ON AIR</div>';

@@ -75,7 +75,9 @@ class Compiler {
 
 			$_terms = Term::open_between($start, $end);
 
-			$wpdb->query('TRUNCATE `' . Controller::$prefix . 'compiled_times`;');
+			// Delete everything that wasn't in the past 7 days.
+			$wpdb->query('DELETE FROM `' . Controller::$prefix . 'compiled_times` WHERE start_time > ' . $start); 
+			$wpdb->query('DELETE FROM `' . Controller::$prefix . 'compiled_times` WHERE end_time < ' . ($start - 86400*7));
 
 			foreach ($_terms as $i => $_term) {
 				$this->compile_term($_term, $start, $end, $i == 0);
