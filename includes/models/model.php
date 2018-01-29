@@ -19,13 +19,17 @@ abstract class Model implements \JsonSerializable {
 		global $wpdb;
 		return $wpdb;
 	}
+	
+	public static function prefix () {
+		return Controller::$prefix;
+	}
 
 	public static function find ($key) {
 
 		$wpdb = static::database();
 
 		$_row = $wpdb->get_row(
-			$wpdb->prepare('SELECT * FROM `' . Controller::$prefix . static::$table_name . '` WHERE id = %d;', $key),
+			$wpdb->prepare('SELECT * FROM `' . static::prefix() . static::$table_name . '` WHERE id = %d;', $key),
 			'ARRAY_A'
 		);
 
@@ -47,23 +51,23 @@ abstract class Model implements \JsonSerializable {
 
 		$wpdb = static::database();
 
-		$_rows = $wpdb->get_results('SELECT * FROM `' . Controller::$prefix . static::$table_name . '`;', 'ARRAY_A');
+		$_rows = $wpdb->get_results('SELECT * FROM `' . static::prefix() . static::$table_name . '`;', 'ARRAY_A');
 
 		$_rows = array_map(function($row) { return new static($row); }, $_rows);
 		return $_rows;
 
 	}
 
-	public static function where ($key, $value) {
+	public static function where ($key, $value, $sym = '=') {
 
-		return new QueryStub(Controller::$prefix . static::$table_name, get_called_class(), $key, $value);
+		return new QueryStub(static::prefix() . static::$table_name, get_called_class(), $key, $value, $sym, null, static::database());
 
 	}
 
 	public function save () {
 
 		$wpdb = static::database();
-		$table = Controller::$prefix . static::$table_name;
+		$table = static::prefix() . static::$table_name;
 
 		$_data = array_intersect_key($this->_data, array_flip(static::$columns));
 
@@ -83,7 +87,7 @@ abstract class Model implements \JsonSerializable {
 			return;
 		}
 
-		$table = Controller::$prefix . static::$table_name;
+		$table = static::prefix() . static::$table_name;
 		$wpdb->delete($table, array('id' => $this->id));
 		$this->id = NULL;
 
@@ -131,17 +135,19 @@ class QueryStub {
 
 	public $parent = null;
 
-	public function __construct ($table_name, $class, $key, $value, $parent = null) {
+	public function __construct ($table_name, $class, $key, $value, $sym = '=', $parent = null, $wpdb = null) {
 		$this->table_name = $table_name;
 		$this->class = $class;
 		$this->key = $key;
 		$this->value = $value;
 		$this->parent = $parent;
+		$this->sym = $sym;
+		$this->wpdb = $wpdb;
 	}
 
-	public function where ($key, $value) {
+	public function where ($key, $value, $sym = '=') {
 
-		$instance = new self($this->table_name, $class, $key, $value, $this);
+		$instance = new self($this->table_name, $this->class, $key, $value, $sym, $this, $this->wpdb);
 
 		return $instance;
 
@@ -149,7 +155,6 @@ class QueryStub {
 
 	public function get () {
 
-		global $wpdb;
 
 		$_class = $this->class;
 
@@ -158,16 +163,16 @@ class QueryStub {
 		$_top = $this;
 		// Add arguments to our array of parameters
 		while ($_top != null) {
-			$_args[0][] = '`' . $_top->key . '` = %s';
+			$_args[0][] = '`' . $_top->key . '` ' . $_top->sym . ' %s';
 			$_args[] = $_top->value;
 			$_top = $_top->parent;
 		}
 		// Join all the query bits with ANDs
 
 		$_args[0] = $_args[0][0] . join(' AND ', array_slice($_args[0], 1)) . ';';
-		$_query = call_user_func_array(array($wpdb, 'prepare'), $_args);
+		$_query = call_user_func_array(array($this->wpdb, 'prepare'), $_args);
 
-		$_rows = $wpdb->get_results($_query, 'ARRAY_A');
+		$_rows = $this->wpdb->get_results($_query, 'ARRAY_A');
 		$_rows = array_map(function($row) use ($_class) { return new $_class($row); }, $_rows);
 		return $_rows;
 
