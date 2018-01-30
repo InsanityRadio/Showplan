@@ -19,7 +19,7 @@
 
 defined ('ABSPATH') or exit;
 
-require 'includes/controller.php';
+require_once 'includes/controller.php';
 use Showplan\Controller;
 
 Controller::bootstrap(__FILE__);
