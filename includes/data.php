@@ -85,10 +85,15 @@ class Data {
 		}
 
 		add_shortcode( 'showplan-schedule', function ($atts) use ($that) {
+			
 			$atts = shortcode_atts(array('station' => 1, 'days' => 10, 'sustainer' => 1, 'images' => 1), $atts);
 
 			\Showplan\Frontend::enqueue_script('showplan_front', plugins_url('js/tabs.js', dirname(__FILE__)), false);
 			\Showplan\Frontend::enqueue_style('showplan_front', plugins_url('css/tabs.css', dirname(__FILE__)));
+			
+			if (($data = apply_filters('showplan_schedule_inject', null)) !== null) {
+				return $data;
+			}
 
 			$_schedule = $that->get_schedule($atts['station'], $atts['days'], $atts['sustainer']);
 			$_midnight = Data::get_midnight();
@@ -117,6 +122,11 @@ class Data {
 				$_data .= '<div class="showplan-tab showplan-day-' . $_day . $_today . '">';
 
 				foreach ($_shows as $_show) {
+
+					$_show_name = apply_filters('showplan_schedule_widget_title', esc_html($_show->show->name), $_show);
+					$_show_hosts = apply_filters('showplan_schedule_widget_hosts', esc_html($_show->show->hosts), $_show);
+					$_show_description = apply_filters('showplan_schedule_widget_description', esc_html($_show->show->description), $_show);
+
 					$_oa = ($_show->start_time_local <= time() && $_show->end_time_local > time());
 					$_data .= '<div data-start-time="' . $_show->start_time . '" data-end-time="' . $_show->end_time . '" class="showplan-show' . ($_oa ? ' showplan-on-air' : '') . ' showplan-category-' . ($_show->show->category_id) . '"><div>';
 					$_data .= '<div>' . gmdate("H:i", $_show->start_time) . '<span class="showplan-end-time">- ' . gmdate("H:i", $_show->end_time) . '</span>';
@@ -126,9 +136,9 @@ class Data {
 					$_data .= '</div>';
 					$_data .= '<div></div>';
 					$_data .= '<div>';
-					$_data .= '<h3>' . $_show->show->name . '</h3>';
-					$_data .= '<span>' . $_show->show->hosts . '</span>';
-					$_data .= '<p>' . $_show->show->description . '</p>';
+					$_data .= '<h3>' . $_show_name . '</h3>';
+					$_data .= '<span>' . $_show_hosts . '</span>';
+					$_data .= '<p>' . $_show_description . '</p>';
 					$_data .= '</div>';
 					$_data .= '</div></div>';
 				}
