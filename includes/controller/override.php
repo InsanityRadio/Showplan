@@ -31,7 +31,11 @@ class Overrides extends Controller {
 
 		return json_encode(array_map(function ($a) {
 			$b = $a->__array();
-			$b['show'] = $a->show->__array();
+			try {
+				$b['show'] = $a->show->__array();
+			} catch (Exception $e) {
+				$b['show'] = null;
+			}
 			return $b;
 		}, $_template));
 
