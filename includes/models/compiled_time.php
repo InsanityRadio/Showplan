@@ -89,6 +89,7 @@ class CompiledTime extends Model {
 			'start_time_local' => (int) $this->_data['start_time_local'],
 			'end_time_local' => (int) $this->_data['end_time_local'],
 			'time_display' => gmdate('j M Y H:i', $this->_data['start_time']),
+			'episode_key' => $this->_data['station_id'] . '-' . $this->_data['start_time'],
 			'show' => $this->show
 		);
 

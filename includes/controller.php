@@ -185,6 +185,8 @@ class Controller {
 			hosts TEXT NOT NULL,
 			public INT DEFAULT 1,
 			one_liner VARCHAR(255),
+			media_id VARCHAR(255),
+			media_url VARCHAR(512),
 			category_id INT NOT NULL REFERENCES `' . self::$prefix . 'categories`(`id`)
 				ON DELETE CASCADE ON UPDATE CASCADE
 		);';
@@ -230,6 +232,7 @@ class Controller {
 		$_tables .= 'CREATE TABLE `' . self::$prefix . 'compiled_times` (
 			id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			iteration_id INT NOT NULL,
+			episode_key VARCHAR(255),
 			start_time BIGINT,
 			end_time BIGINT,
 			start_time_local BIGINT,

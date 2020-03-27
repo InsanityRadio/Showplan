@@ -14,6 +14,12 @@ class Shows extends Controller {
 		add_submenu_page('showplan-override', 'Shows', 'Shows', 'manage_options', 'showplan-shows', array($this, 'render'));
 		$this->table = new ShowListTable();
 
+
+
+		wp_enqueue_script('jquery');
+		// This will enqueue the Media Uploader script
+		wp_enqueue_media();
+
 	}
 
 	public function render_home () {
@@ -93,7 +99,13 @@ class Shows extends Controller {
 								<input type="text" name="show[one_liner]" value="<?php echo esc_attr($show->one_liner); ?>"/>
 							</td>
 						</tr>
-
+						
+						<tr valign="top">
+							<th scope="row">Main Show Photo</th>
+							<td>
+								<input type="text" name="show[media_id]" id="media-id" value="<?php echo esc_attr($show->media_id); ?>"/> <button class="button" id="media-id-btn">Upload</button>
+							</td>
+						</tr>
 						<tr valign="top">
 							<th scope="row">Category</th>
 							<td>
@@ -116,7 +128,30 @@ class Shows extends Controller {
 							</td>
 						</tr>
 				</table>
-				<input type="submit" value="Save" />
+				<input type="submit" value="Save" class="button" />
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $('#media-id, #media-id-btn').click(function(e) {
+        e.preventDefault();
+        var image = wp.media({ 
+            title: 'Upload Image',
+            // mutiple: true if you want to upload multiple files at once
+            multiple: false
+        }).open()
+        .on('select', function(e){
+            // This will return the selected image from the Media Uploader, the result is an object
+            var uploaded_image = image.state().get('selection').first();
+            // We convert uploaded_image to a JSON object to make accessing it easier
+            // Output to the console uploaded_image
+            console.log(uploaded_image);
+            var image_url = uploaded_image.toJSON().id;
+            // Let's assign the url value to the input field
+            $('#media-id').val(image_url);
+        });
+    });
+});
+</script>
 
 			</form>
 		</div>
@@ -131,12 +166,13 @@ class Shows extends Controller {
 	}
 
 	public function update ($show) {
-		$show->name = trim($_POST['show']['name']);
+		$show->name = trim($_POST['show']['name']) ?: trim($_POST['show']['hosts']);
 		$show->description = trim($_POST['show']['description']);
 		$show->hosts = trim($_POST['show']['hosts']);
 		$show->category_id = (int) $_POST['show']['category_id'];
 		$show->public = $_POST['show']['hidden'] ? 0 : 1;
 		$show->one_liner = trim($_POST['show']['one_liner']);
+		$show->media_id = (string) ((int) $_POST['show']['media_id']);
 		$show->save();
 	}
 
@@ -199,6 +235,7 @@ class ShowListTable extends \Showplan\List_Table {
 			$b = $a->__array();
 			$b['category'] = $a->category->reference;
 			$b['public'] = !$a->public ? 'Yes' : 'No';
+			$b['media_id'] = $a->media_id != null ? 'Y' : 'N';
 			return $b;
 		}, $this->table_data());
 
@@ -215,6 +252,7 @@ class ShowListTable extends \Showplan\List_Table {
 			'name' => 'Name',
 			'description' => 'Description',
 			'hosts' => 'Hosts',
+			'media_id' => 'Media',
 			'category' => 'Category',
 			'public' => 'Hidden'
 		);
@@ -230,7 +268,8 @@ class ShowListTable extends \Showplan\List_Table {
 
 	private function table_data () {
 
-		return Show::all();
+		$data = Show::all();
+		return $data;
 
 	}
 

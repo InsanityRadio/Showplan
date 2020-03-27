@@ -7,7 +7,7 @@ use \Exception;
 class Show extends Model {
 
 	protected static $table_name = 'shows';
-	protected static $columns = ['id', 'name', 'description', 'hosts', 'one_liner', 'public', 'category_id'];
+	protected static $columns = ['id', 'name', 'description', 'hosts', 'one_liner', 'public', 'category_id', 'media_id', 'media_url'];
 
 	public static function default_one_liner ($show) {
 
@@ -33,6 +33,15 @@ class Show extends Model {
 
 	}
 
+	public function set_media_id ($media_id) {
+		$this->_data['media_id'] = $media_id;
+		$this->_data['media_url'] = wp_get_attachment_url($media_id);
+	}
+	
+	public function get_media_id () {
+		return $this->_data['media_id'];
+	}
+
 	public function set_public ($public) {
 		if ($public == 0 && $this->category_id == 0) {
 			throw new Exception('Sustainers must not be hidden');
@@ -47,14 +56,20 @@ class Show extends Model {
 		$this->category_id = $category->id;
 	}
 
+	public function getData () {
+		return $this->_data;
+	}
+
 	public function __json () {
 
 		return array(
-			'name' => $this->_data['name'],
+			'name' => $this->_data['name'] ?: $this->_data['hosts'],
 			'description' => $this->_data['description'],
 			'hosts' => $this->_data['hosts'],
 			'summary' => $this->_data['one_liner'],
-			'category' => $this->category->reference
+			'category' => $this->category->reference,
+			// 'media_id' => $this->_data['media_id'],
+			'media_url' => $this->_data['media_url']
 		);
 
 	}	

@@ -62,6 +62,18 @@ class Overrides extends Controller {
 		return $this->render_assign();
 	}
 
+	public function selector () {
+		$_data = '<select id="showplan_station_selector" oninput="let params = new URLSearchParams(location.search.substr(1)); params.set(\'id\', event.target.value); location.search = params.toString();">';
+
+		$_stations = Station::all();
+		foreach ($_stations as $_station) {
+			$_data .= '<option ' . ($_GET['id'] == $_station->id ? 'selected': '') . ' value="' . esc_attr($_station->id) . '">' . esc_html($_station->reference) . '</option>';
+		}
+
+		$_data .= '</select>';
+		return $_data;
+	}
+
 	public function render_assign () {
 
 		echo '<div class="wrap">';
@@ -75,7 +87,7 @@ class Overrides extends Controller {
 		$_base = strtotime('last monday', $_start + 86400); // start_of_week;
 ?>
 
-		<h2>Edit Overrides: <b><?php echo esc_html($_station->reference); ?></b></h2>
+		<h2>Edit Overrides: <b><?php echo esc_html($_station->reference); ?></b> <?php echo $this->selector(); ?></h2>
 		<div class="showplan-tools">
 
 			<a href="<?php echo \Showplan\Frontend::nonce_url('./admin.php?page=showplan-show-times&action=compile', 'showplan-compile', 'k'); ?>" class="button" style="float: left; margin-right: 5px;">Publish</a> <p style="margin: -5px 0 0 0; font-size: 9pt;">Auto-publishing in<br /><span id="showplan-publish-countdown">00:30:00</span></p>
