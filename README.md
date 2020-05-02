@@ -47,8 +47,12 @@ Add some shortcode to your schedule page. See API below for a full list.
 A few simple API methods are available. We have no issue with these being public, but you may remove the api.php file if you wish to prevent this.
 
 `http://localhost/wp-content/plugins/showplan/api.php?method=get_upcoming&station_id=1`
+
 `http://localhost/wp-content/plugins/showplan/api.php?method=get_show&show_id=1&station_id=1`
-`http://localhost/wp-content/plugins/showplan/api.php?method=get_schedule&station_id=1&days=4` (note: includes 3 days of previous history, days value inclusive of this - so use 4 + days into future)
+
+`http://localhost/wp-content/plugins/showplan/api.php?method=get_schedule&station_id=1&days=4`
+
+(note: includes 3 days of previous history, days value inclusive of this - so use 4 + days into future)
 
 The database is designed to allow non-complicated reading from anything capable of connecting to a MySQL server. See the `$prefix_compiled_times` table for more (start_time and end_time are always UTC, start_time_local is based on the WordPress site's timezone)
 
