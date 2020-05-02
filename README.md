@@ -1,12 +1,12 @@
-# <img src="https://raw.githubusercontent.com/InsanityRadio/OnAirController/master/doc/headphones_dark.png" align="left" height=48 /> Showplan
+# <img src="https://raw.githubusercontent.com/InsanityRadio/OnAirController/master/doc/headphones_dark.png" align="left" height=48 /> Showplan 1.0
 
 Showplan is a WordPress plugin for managing your radio station's schedule.
 
-This is not a mature product. The current release (0.1) is considered an alpha, and we can't guarantee it'll work without issues.
+It has been built for Insanity Radio's website, but the code is open source and contributions are welcome. We don't have the opportunity to test every configuration, so use the Issues feature to report bugs. 
 
 ## Installation
 
-The current beta can be installed by <a href="https://github.com/InsanityRadio/Showplan/archive/master.zip">downloading the tarball</a> of the project, and either uploading it to WordPress or extracting it in the plugins directory.
+The latest version can be installed by <a href="https://github.com/InsanityRadio/Showplan/archive/master.zip">downloading the tarball</a> of the project, and either uploading it to WordPress or extracting it in the plugins directory. It may make more sense to use a release, which can be found on the GitHub page for this project.
 
 Showplan needs to run on PHP 5.6 (might work on 5.5, but untested). Older PHP versions are no longer supported, so it's probably worth updating your web server if you are running anything less. 
 
@@ -44,9 +44,11 @@ Add some shortcode to your schedule page. See API below for a full list.
 
 ## API
 
-TBC. However as a proof of concept, you can currently visit the following URI to dump the next three shows:
+A few simple API methods are available. We have no issue with these being public, but you may remove the api.php file if you wish to prevent this.
 
-`http://localhost:8080/wp-content/plugins/showplan/api.php?method=get_upcoming&station_id=1`
+`http://localhost/wp-content/plugins/showplan/api.php?method=get_upcoming&station_id=1`
+`http://localhost/wp-content/plugins/showplan/api.php?method=get_show&show_id=1&station_id=1`
+`http://localhost/wp-content/plugins/showplan/api.php?method=get_schedule&station_id=1&days=4` (note: includes 3 days of previous history, days value inclusive of this - so use 4 + days into future)
 
 The database is designed to allow non-complicated reading from anything capable of connecting to a MySQL server. See the `$prefix_compiled_times` table for more (start_time and end_time are always UTC, start_time_local is based on the WordPress site's timezone)
 

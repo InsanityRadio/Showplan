@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Showplan
  * Plugin URI: https://github.com/insanityradio/showplan/
- * Version: 0.1
+ * Version: 1.0
  * Description: Creates a simple yet powerful way to manage your station's schedule
  * Author: Jamie Woods & Insanity Tech
  * Author URI: https://insanityradio.com
