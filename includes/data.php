@@ -87,7 +87,7 @@ class Data {
 
 		add_shortcode( 'showplan-schedule', function ($atts) use ($that) {
 			
-			$atts = shortcode_atts(array('station' => 1, 'days' => 10, 'sustainer' => 1, 'images' => 1), $atts);
+			$atts = shortcode_atts(array('station' => 1, 'days' => 10, 'sustainer' => 1, 'images' => 0), $atts);
 
 			\Showplan\Frontend::enqueue_script('showplan_front', plugins_url('js/tabs.js', dirname(__FILE__)), false);
 			\Showplan\Frontend::enqueue_style('showplan_front', plugins_url('css/tabs.css', dirname(__FILE__)));
@@ -114,7 +114,6 @@ class Data {
 			}
 
 			$_data .= '	</tr></table>';
-
 			$_data .= '<div class="showplan-tabs">';
 
 			foreach ($_schedule as $_day => $_shows) {
@@ -135,7 +134,11 @@ class Data {
 						$_data .= '<div class="showplan-on-air-indicator">ON AIR</div>';
 					}
 					$_data .= '</div>';
-					$_data .= '<div></div>';
+					if ($atts["images"] == "1" && $_show->show->media_url) {
+						$_data .= '<div style="vertical-align:middle;padding-right:15px"><img src="' . esc_attr($_show->show->media_url) . '" /></div>';
+					} else {
+						$_data .= '<div></div>';
+					}
 					$_data .= '<div>';
 					$_data .= '<h3>' . $_show_name . '</h3>';
 					$_data .= '<span>' . $_show_hosts . '</span>';
@@ -157,6 +160,11 @@ class Data {
 			boot($that, $atts);
 			return $that->_cache['upcoming'][0]->show->name;
 		});
+		
+		add_shortcode( 'showplan-now-image', function ($atts) use ($that) {
+			boot($that, $atts);
+			return '<img class="showplan-show-image" src="' . $that->_cache['upcoming'][0]->show->media_url . '" />';
+ 		});
 
 		add_shortcode( 'showplan-now-description', function ($atts) use ($that) {
 			boot($that, $atts);
@@ -184,6 +192,11 @@ class Data {
 			boot($that, $atts);
 			return $that->_cache['upcoming'][1]->show->name;
 		});
+		
+		add_shortcode( 'showplan-now-image', function ($atts) use ($that) {
+			boot($that, $atts);
+			return '<img class="showplan-show-image" src="' . $that->_cache['upcoming'][1]->show->media_url . '" />';
+ 		});
 
 		add_shortcode( 'showplan-next-description', function ($atts) use ($that) {
 			boot($that, $atts);
