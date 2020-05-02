@@ -44,6 +44,8 @@ if (!defined('ABSPATH')) {
  */
 class Data {
 
+	public $_cache;
+
 	public static function get_midnight ($opposite_days = 0) {
 		$_ts = Compiler::invert_timestamp_localised(time(), get_option('timezone_string'));
 		return $_ts - ($_ts % 86400) - 86400 * $opposite_days;

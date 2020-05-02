@@ -32,8 +32,6 @@ Add some shortcode to your schedule page. See API below for a full list.
 
 ### Up Next
 
-* Fix multiple station support
-* Select term to edit
 * Categories
 * TimeZone change (is currently set to the TimeZone that WordPress uses)
 * Unit and E2E testing 
@@ -41,7 +39,7 @@ Add some shortcode to your schedule page. See API below for a full list.
 ### Later
 
 * Terms of more than one week (ie. week A/B)
-* Show Images and/or Pages
+* Show Pages
 * More API calls
 
 ## API
@@ -55,6 +53,8 @@ The database is designed to allow non-complicated reading from anything capable 
 In WordPress you can access various data using short codes. Your theme needs to support shortcodes in widgets in order to use them in widgets.
 
 `[showplan-now-title station=1]` Current show title
+
+`[showplan-now-image station=1]` Current show image (as a HTML image element)
 
 `[showplan-now-description station=1]` Current show description
 
