@@ -157,7 +157,7 @@ class ShowPlan extends Controller {
 			<div id="showplan-tools-remove" style="display: none">
 
 				<h2>Edit</h2>
-
+				<a href="admin.php?page=showplan-shows&action=edit&id=1"><button class="button">Edit Show</button></a>
 				<form action="" method="post">
 
 					<?php \Showplan\Frontend::nonce_field('showplan_template_delete'); ?>

@@ -68,7 +68,7 @@ class Show extends Model {
 			'hosts' => $this->_data['hosts'],
 			'summary' => $this->_data['one_liner'],
 			'category' => $this->category->reference,
-			// 'media_id' => $this->_data['media_id'],
+			'media_id' => $this->_data['media_id'],
 			'media_url' => $this->_data['media_url']
 		);
 

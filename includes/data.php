@@ -16,6 +16,7 @@ use \Showplan\Compiler;
 use \Showplan\Models\CompiledTime;
 use \Showplan\Models\ShowTime;
 use \Showplan\Models\Station;
+use \Showplan\Models\Show;
 
 // Init WordPress if we're including just this library. 
 if (!defined('ABSPATH')) {
@@ -91,7 +92,7 @@ class Data {
 			\Showplan\Frontend::enqueue_script('showplan_front', plugins_url('js/tabs.js', dirname(__FILE__)), false);
 			\Showplan\Frontend::enqueue_style('showplan_front', plugins_url('css/tabs.css', dirname(__FILE__)));
 			
-			if (($data = apply_filters('showplan_schedule_inject', null)) !== null) {
+			if (($data = apply_filters('showplan_schedule_inject', $atts)) !== null) {
 				return $data;
 			}
 
@@ -259,6 +260,11 @@ class Data {
 
 		return $_shows;
 
+	}
+
+	public function get_show ($station) {
+		$show = Show::find((int) $_GET['show_id']);
+		return $show;
 	}
 
 }

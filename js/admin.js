@@ -30,7 +30,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById('showplan-tools-times').value = 
 		document.getElementById('showplan-tools-times2').value = times.join(";");
 
-		document.getElementById('showplan-tools-remove-ids').value = selected.map(function (a) { return a.dataset.id }).join(";");
+		console.log('select', selected)
+
+		let showIDs = Array.from(new Set(selected.map(function (a) { return a.dataset.show_id }))).join(";");
+		let schIDs = Array.from(new Set(selected.map(function (a) { return a.dataset.id }))).join(";");
+		document.querySelector("#showplan-tools-remove a:first-of-type").href = "admin.php?page=showplan-shows&action=edit&id=" + showIDs;
+		document.getElementById('showplan-tools-remove-ids').value = schIDs;
 
 		document.getElementById('showplan-tools-assign').style.display = selected.length && !hasSelectedReal ? 'block' : 'none';
 		document.getElementById('showplan-tools-remove').style.display = selected.length && hasSelectedReal ? 'block' : 'none';
@@ -89,6 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 		element.innerHTML = "<h1></h1><span></span>";
 		element.dataset.id = show.id;
+		element.dataset['show_id'] = show.show.id;
 		if (first) {
 			element.querySelector("h1").textContent = show.show.name;
 			element.querySelector("span").textContent = show.show.hosts;
