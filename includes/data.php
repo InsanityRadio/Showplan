@@ -94,8 +94,10 @@ class Data {
 			\Showplan\Frontend::enqueue_script('showplan_front', plugins_url('js/tabs.js', dirname(__FILE__)), false);
 			\Showplan\Frontend::enqueue_style('showplan_front', plugins_url('css/tabs.css', dirname(__FILE__)));
 			
-			if (($data = apply_filters('showplan_schedule_inject', $atts)) !== null) {
+			if (($data = apply_filters('showplan_schedule_inject', $atts)) !== $atts && $data != null) {
+var_dump($data);
 				return $data;
+
 			}
 
 			$_schedule = $that->get_schedule($atts['station'], $atts['days'], $atts['sustainer']);
