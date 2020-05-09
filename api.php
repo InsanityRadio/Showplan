@@ -1,12 +1,35 @@
 <?php
+namespace Showplan;
+
+// Init WordPress if we're including just this library. 
+if (!defined('ABSPATH')) {
+
+	define('SHORTINIT', true);
+	define('ABSPATH', dirname(dirname(dirname(dirname(__FILE__)))) . '/');
+
+	require_once ABSPATH . 'wp-load.php';
+
+	if ($_GET['site_id']) {
+		switch_to_blog((int) $_GET['site_id']);
+	}
+
+	class Controller {
+		public static $prefix;
+	}
+
+	Controller::$prefix = $wpdb->prefix . 'showplan_';
+
+}
+
+
 require_once 'includes/data.php';
 
 $start = microtime(true);
 
-$_station_id = $_GET['station_id'];
+$_station_id = (int) $_GET['station_id'];
 $_method = $_GET['method'];
 
-$_days = $_GET['days'];
+$_days = (int) $_GET['days'];
 
 $_data = new \Showplan\Data();
 

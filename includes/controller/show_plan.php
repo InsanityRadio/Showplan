@@ -80,7 +80,7 @@ class ShowPlan extends Controller {
 		$_shows = Show::all();
 		$_categories = Category::all();
 
-		$_term = $_GET['id'] ? Term::find($_GET['id']) : Term::get_current_term();
+		$_term = $_GET['id'] ? Term::find((int) $_GET['id']) : Term::get_current_term();
 ?>
 
 		<h2>Edit Schedule Template: <b><?php echo esc_html($_term->reference); ?></b></h2>
@@ -245,8 +245,8 @@ class ShowPlan extends Controller {
 			\Showplan\Frontend::_die('Security fail!');
 		}
 
-		$_the_show = Show::find($_POST['show']['id']);
-		$_the_term = Term::find($_POST['term']['id']);
+		$_the_show = Show::find((int) $_POST['show']['id']);
+		$_the_term = Term::find((int) $_POST['term']['id']);
 		$_raw_times = explode(";", $_POST['times']);
 
 		$_times = array();
@@ -306,7 +306,7 @@ class ShowPlan extends Controller {
 		$_ids = explode(";", $_POST['ids']);
 
 		foreach ($_ids as $_id) {
-			$_model = ShowTime::find($_id);
+			$_model = ShowTime::find((int) $_id);
 			$_model->remove();
 		}
 

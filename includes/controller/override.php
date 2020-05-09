@@ -81,9 +81,9 @@ class Overrides extends Controller {
 		$_shows = Show::all();
 		$_categories = Category::all();
 
-		$_station = $_GET['id'] ? Station::find($_GET['id']) : Station::find(1);
+		$_station = $_GET['id'] ? Station::find((int) $_GET['id']) : Station::find(1);
 
-		$_start = $_GET['date'] ?: time();
+		$_start = (int) $_GET['date'] ?: time();
 		$_base = strtotime('last monday', $_start + 86400); // start_of_week;
 ?>
 
@@ -261,8 +261,8 @@ class Overrides extends Controller {
 		 \Showplan\Frontend::_die('Security fail!');
 		}
 
-		$_the_show = Show::find($_POST['show']['id']);
-		$_the_station = Station::find($_POST['station']['id']);
+		$_the_show = Show::find((int) $_POST['show']['id']);
+		$_the_station = Station::find((int) $_POST['station']['id']);
 
 		$_raw_times = explode(";", $_POST['times']);
 
@@ -323,7 +323,7 @@ class Overrides extends Controller {
 		$_ids = explode(";", $_POST['ids']);
 
 		foreach ($_ids as $_id) {
-			$_model = Override::find($_id);
+			$_model = Override::find((int) $_id);
 			$_model->remove();
 		}
 

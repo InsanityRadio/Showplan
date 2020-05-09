@@ -48,6 +48,12 @@ class Controller {
 		add_action('admin_menu', array('\Showplan\Controller', 'admin_menu'));
 		add_action('showtime_compile_timetable', array('\Showplan\Controller', 'compile'));
 		add_action('admin_enqueue_scripts', array('\Showplan\Controller', 'admin_link'));
+		add_action('rest_api_init', function () {
+			register_rest_route('showplan', '/(?P<station_id>[0-9]+)/(?P<method>[a-z_]+)/', array(
+				'methods' => 'GET',
+				'callback' => array('\Showplan\Data', 'rest_api')
+			));
+		});
 
 		$_data = new Data();
 		$_data->bootstrap();

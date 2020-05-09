@@ -18,26 +18,6 @@ use \Showplan\Models\ShowTime;
 use \Showplan\Models\Station;
 use \Showplan\Models\Show;
 
-// Init WordPress if we're including just this library. 
-if (!defined('ABSPATH')) {
-
-	define('SHORTINIT', true);
-	define('ABSPATH', dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/');
-
-	require_once ABSPATH . 'wp-load.php';
-
-	if ($_GET['site_id']) {
-		switch_to_blog($_GET['site_id']);
-	}
-
-	class Controller {
-		public static $prefix;
-	}
-
-	Controller::$prefix = $wpdb->prefix . 'showplan_';
-
-}
-
 /**
  * Data allows you to retrieve information to display on the frontend. 
  * It does n
@@ -51,6 +31,25 @@ class Data {
 		return $_ts - ($_ts % 86400) - 86400 * $opposite_days;
 	}
 
+
+	public static function rest_api ( \WP_REST_Request $request ){
+
+		$start = microtime(true);
+		$_method = $request['method'];
+		$_station_id = $request['station_id'];
+		$_days = $_GET['days'] ? (int) $_GET['days'] : null;
+		$_data = new \Showplan\Data();
+		$_result = null;
+		if ($_station_id && $_method && substr($_method, 0, 4) == 'get_') {
+			$_result = call_user_func_array(array($_data, $_method), [$_station_id, $_days]);
+		}
+		return array(
+			'station' => $_data->get_station($_station_id),
+			'execute_time' => microtime(true) - $start,
+			'body' => $_result
+		);
+
+	}
 	public function get_schedule ($station, $days = 7, $sustainer = true) {
 
 		$_schedule = $this->get_guide($station);

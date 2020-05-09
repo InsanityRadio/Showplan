@@ -30,7 +30,7 @@ class Terms extends Controller {
 
 	public function render_delete () {
 
-		$_terms = [Term::find($_GET['id'])];
+		$_terms = [Term::find((int) $_GET['id'])];
 
 ?>
 		<form action="" method="post">
@@ -55,7 +55,7 @@ class Terms extends Controller {
 	public function render_edit ($term = null) {
 
 		if (!$term)
-			$term = Term::find($_GET['id']);
+			$term = Term::find((int) $_GET['id']);
 
 		$_stations = Station::all();
 ?>
@@ -88,14 +88,14 @@ class Terms extends Controller {
 						<tr valign="top">
 							<th scope="row">Start Date</th>
 							<td>
-								<input type="text" name="term[start_time]" value="<?php echo esc_attr($term->start_time); ?>"/>
+								<input type="text" name="term[start_time]" value="<?php echo date(DATE_RFC2822, $term->start_time); ?>"/>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<th scope="row">End Date</th>
 							<td>
-								<input type="text" name="term[end_time]" value="<?php echo esc_attr($term->end_time); ?>"/>
+								<input type="text" name="term[end_time]" value="<?php echo date(DATE_RFC2822, $term->end_time); ?>"/>
 							</td>
 						</tr>
 
@@ -122,10 +122,12 @@ class Terms extends Controller {
 	}
 
 	private function update ($term) {
-		$term->reference = $_POST['term']['reference'];
-		$term->station_id = $_POST['term']['station_id'];
-		$term->start_time = $_POST['term']['start_time'];
-		$term->end_time = $_POST['term']['end_time'];
+		$term->reference = sanitize_text_field($_POST['term']['reference']);
+		$term->station_id = Station::find((int) $_POST['term']['station_id'])->id;
+		$start_time = sanitize_text_field($_POST['term']['start_time']);
+		$end_time = sanitize_text_field($_POST['term']['end_time']);
+		$term->start_time = strtotime($start_time) ?: (int) $start_time;
+		$term->end_time = strtotime($end_time) ?: (int) $end_time;
 		$term->total_weeks = $_POST['term']['total_weeks'];
 		$term->save();
 	}
@@ -136,7 +138,7 @@ class Terms extends Controller {
 		 \Showplan\Frontend::_die('Security fail!');
 		}
 
-		$this->update(Term::find($_GET['id']));
+		$this->update(Term::find((int) $_GET['id']));
 		echo '<meta http-equiv="refresh" content="0;url=' . esc_attr($this->get_uri(false)) . '" />';
 		exit;
 
@@ -163,7 +165,7 @@ class Terms extends Controller {
 
 		$_ids = $_POST['terms'];
 		foreach ($_ids as &$_id) {
-			$_id = Term::find($_id);
+			$_id = Term::find((int) $_id);
 		}
 
 		foreach ($_ids as $_term) {
@@ -191,10 +193,10 @@ class TermListTable extends \Showplan\List_Table {
 			return $b;
 		}, $this->table_data());
 
-        $this->set_pagination_args( array(
-            'total_items' => sizeof($this->items),
-            'per_page'    => sizeof($this->items),
-        ) );
+		$this->set_pagination_args( array(
+			'total_items' => sizeof($this->items),
+			'per_page'    => sizeof($this->items),
+		) );
 
 	}
 
@@ -236,8 +238,8 @@ class TermListTable extends \Showplan\List_Table {
 	public function column_reference ($item) {
 		$_actions = array(
 			'assign' => sprintf('<a href="?page=%s&action=%s&id=%s">Assign</a>', 'showplan-show-times', 'assign', $item['id']),
-			'edit' => sprintf('<a href="?page=%s&action=%s&id=%s">Edit Settings</a>', $_REQUEST['page'], 'edit', $item['id']),
-			'delete' => sprintf('<a href="?page=%s&action=%s&id=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id']),
+			'edit' => sprintf('<a href="?page=%s&action=%s&id=%s">Edit Settings</a>', esc_attr($_REQUEST['page']), 'edit', $item['id']),
+			'delete' => sprintf('<a href="?page=%s&action=%s&id=%s">Delete</a>', esc_attr($_REQUEST['page']), 'delete', $item['id']),
 		);
 		return sprintf('%s %s', $item['reference'], $this->row_actions($_actions));
 	}

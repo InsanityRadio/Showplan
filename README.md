@@ -42,7 +42,23 @@ Add some shortcode to your schedule page. See API below for a full list.
 * Show Pages
 * More API calls
 
-## API
+## API
+
+Showplan registers API endpoints directly in WordPress, so you can easily access live schedule data programatically without having to access the database. 
+
+`https://insanityradio.com/wp-json/showplan/<station_id>/get_upcoming/`
+
+`https://insanityradio.com/wp-json/showplan/<station_id>/get_show/?show_id=1`
+
+`https://insanityradio.com/wp-json/showplan/<station_id>/get_schedule/?days=4`
+
+`https://insanityradio.com/wp-json/showplan/<station_id>/get_upcoming/`
+
+(note: includes 3 days of previous history, days value inclusive of this - so use 4 + days into future)
+
+## Legacy API
+
+This API has been deprecated and is not available in versions of Showplan downloaded from the WordPress Plugin directory. 
 
 A few simple API methods are available. We have no issue with these being public, but you may remove the api.php file if you wish to prevent this.
 

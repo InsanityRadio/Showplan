@@ -36,7 +36,7 @@ class Shows extends Controller {
 
 	public function render_delete () {
 
-		$_shows = [Show::find($_GET['id'])];
+		$_shows = [Show::find((int) $_GET['id'])];
 
 ?>
 		<form action="" method="post">
@@ -60,7 +60,7 @@ class Shows extends Controller {
 	public function render_edit ($show = null) {
 
 		if (!$show)
-			$show = Show::find($_GET['id']);
+			$show = Show::find((int) $_GET['id']);
 
 		$_categories = Category::all();
 
@@ -166,13 +166,16 @@ jQuery(document).ready(function($){
 	}
 
 	public function update ($show) {
-		$show->name = trim($_POST['show']['name']) ?: trim($_POST['show']['hosts']);
-		$show->description = trim($_POST['show']['description']);
-		$show->hosts = trim($_POST['show']['hosts']);
+		$show->name = sanitize_text_field($_POST['show']['name']) ?: sanitize_text_field($_POST['show']['hosts']);
+		$show->description = sanitize_text_field($_POST['show']['description']);
+		$show->hosts = sanitize_text_field($_POST['show']['hosts']);
 		$show->category_id = (int) $_POST['show']['category_id'];
 		$show->public = $_POST['show']['hidden'] ? 0 : 1;
-		$show->one_liner = trim($_POST['show']['one_liner']);
-		$show->media_id = (string) ((int) $_POST['show']['media_id']);
+		$show->one_liner = sanitize_text_field($_POST['show']['one_liner']);
+		$media_id = (int) $_POST['show']['media_id'];
+		$media_id = wp_get_attachment_url($media_id) ? $media_id : '';
+
+		$show->media_id = $media_id;
 		$show->save();
 	}
 
@@ -182,7 +185,7 @@ jQuery(document).ready(function($){
 		 \Showplan\Frontend::_die('Security fail!');
 		}
 
-		$this->update(Show::find($_GET['id']));
+		$this->update(Show::find((int) $_GET['id']));
 		echo '<meta http-equiv="refresh" content="0;url=' . esc_attr($this->get_uri(false)) . '" />';
 		exit;
 
@@ -209,7 +212,7 @@ jQuery(document).ready(function($){
 
 		$_ids = $_POST['shows'];
 		foreach ($_ids as &$_id) {
-			$_id = Show::find($_id);
+			$_id = Show::find((int) $_id);
 		}
 
 		foreach ($_ids as $_show) {
@@ -281,8 +284,8 @@ class ShowListTable extends \Showplan\List_Table {
 
 	public function column_name ($item) {
 		$_actions = array(
-			'edit' => sprintf('<a href="?page=%s&action=%s&id=%s">Update</a>', $_REQUEST['page'], 'edit', $item['id']),
-			'delete' => sprintf('<a href="?page=%s&action=%s&id=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id']),
+			'edit' => sprintf('<a href="?page=%s&action=%s&id=%s">Update</a>', esc_attr($_REQUEST['page']), 'edit', $item['id']),
+			'delete' => sprintf('<a href="?page=%s&action=%s&id=%s">Delete</a>', esc_attr($_REQUEST['page']), 'delete', $item['id']),
 		);
 		return sprintf('%s %s', $item['name'], $this->row_actions($_actions));
 	}

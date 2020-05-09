@@ -33,7 +33,7 @@ class Stations extends Controller {
 	public function render_edit ($station = null) {
 
 		if (!$station)
-			$station = Station::find($_GET['id']);
+			$station = Station::find((int) $_GET['id']);
 ?>
 		
 		<div class='wrap'>
@@ -96,7 +96,7 @@ class Stations extends Controller {
 		 \Showplan\Frontend::_die('Security fail!');
 		}
 
-		$this->update(Station::find($_GET['id']));
+		$this->update(Station::find((int) $_GET['id']));
 		echo '<meta http-equiv="refresh" content="0;url=' . esc_attr($this->get_uri(false)) . '" />';
 		exit;
 
@@ -169,8 +169,8 @@ class StationListTable extends \Showplan\List_Table {
 
 	public function column_reference ($item) {
 		$_actions = array(
-			'edit' => sprintf('<a href="?page=%s&action=%s&id=%s">Edit</a>', $_REQUEST['page'], 'edit', $item['id']),
-			'delete' => sprintf('<a href="?page=%s&action=%s&id=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id']),
+			'edit' => sprintf('<a href="?page=%s&action=%s&id=%s">Edit</a>', esc_attr($_REQUEST['page']), 'edit', $item['id']),
+			'delete' => sprintf('<a href="?page=%s&action=%s&id=%s">Delete</a>', esc_attr($_REQUEST['page']), 'delete', $item['id']),
 		);
 		return sprintf('%s %s', $item['reference'], $this->row_actions($_actions));
 	}
