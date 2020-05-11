@@ -128,7 +128,7 @@ class Terms extends Controller {
 		$end_time = sanitize_text_field($_POST['term']['end_time']);
 		$term->start_time = strtotime($start_time) ?: (int) $start_time;
 		$term->end_time = strtotime($end_time) ?: (int) $end_time;
-		$term->total_weeks = $_POST['term']['total_weeks'];
+		$term->total_weeks = (int) $_POST['term']['total_weeks'] ?: 1;
 		$term->save();
 	}
 

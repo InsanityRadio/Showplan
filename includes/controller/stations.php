@@ -84,9 +84,9 @@ class Stations extends Controller {
 	}
 
 	private function update ($station) {
-		$station->name = $_POST['station']['name'];
-		$station->reference = $_POST['station']['reference'];
-		$station->description = $_POST['station']['description'];
+		$station->name = sanitize_text_field($_POST['station']['name']);
+		$station->reference = sanitize_text_field($_POST['station']['reference']);
+		$station->description = sanitize_text_field($_POST['station']['description']);
 		$station->save();
 	}
 
