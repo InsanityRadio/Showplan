@@ -6,6 +6,8 @@ It has been built for Insanity Radio's website, but the code is open source and 
 
 ## Installation
 
+<b>Showplan is no longer developed by the Insanity Radio Tech team.</b>
+
 The latest version can be installed by <a href="https://github.com/InsanityRadio/Showplan/archive/master.zip">downloading the tarball</a> of the project, and either uploading it to WordPress or extracting it in the plugins directory. It may make more sense to use a release, which can be found on the GitHub page for this project.
 
 Showplan needs to run on PHP 5.6 (might work on 5.5, but untested). Older PHP versions are no longer supported, so it's probably worth updating your web server if you are running anything less. 
@@ -18,9 +20,7 @@ Changes to the calendars won't show up on the website until you click Publish - 
 
 Add some shortcode to your schedule page. See API below for a full list.
 
-## Roadmap
-
-### Now
+## Features
 
 * Basic scheduling based on calendar "terms"
 * Multiple station support out of the box
@@ -30,19 +30,7 @@ Add some shortcode to your schedule page. See API below for a full list.
 * Schedule widget for website frontend: `[showplan-schedule]`
 * "On Air" widget (or equiv) for website frontend: `[showplan-now-title]` etc.
 
-### Up Next
-
-* Categories
-* TimeZone change (is currently set to the TimeZone that WordPress uses)
-* Unit and E2E testing 
-
-### Later
-
-* Terms of more than one week (ie. week A/B)
-* Show Pages
-* More API calls
-
-## API
+## API
 
 Showplan registers API endpoints directly in WordPress, so you can easily access live schedule data programatically without having to access the database. 
 
@@ -58,7 +46,7 @@ Showplan registers API endpoints directly in WordPress, so you can easily access
 
 ## Legacy API
 
-This API has been deprecated and is not available in versions of Showplan downloaded from the WordPress Plugin directory. 
+This API has been deprecated ~~and is not available in versions of Showplan downloaded from the WordPress Plugin directory~~. 
 
 A few simple API methods are available. We have no issue with these being public, but you may remove the api.php file if you wish to prevent this.
 
