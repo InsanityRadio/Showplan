@@ -69,6 +69,9 @@ class ShowPlan extends Controller {
 	}
 
 	public function render_home () {
+		if ($_GET['isoverrides'] ) {
+			$this->path = 'showplan-override';
+		}
 		echo '<meta http-equiv="refresh" content="0;url=' . esc_attr($this->get_uri(false)) . '&action=assign" />';
 		return;
 	}
@@ -86,7 +89,7 @@ class ShowPlan extends Controller {
 		<h2>Edit Schedule Template: <b><?php echo esc_html($_term->reference); ?></b></h2>
 		<div class="showplan-tools">
 
-			<a href="<?php echo \Showplan\Frontend::nonce_url('./admin.php?page=showplan-show-times&action=compile', 'showplan-compile', 'k'); ?>" class="button" style="float: left; margin-right: 5px;">Publish</a> <p style="margin: -5px 0 0 0; font-size: 9pt;">Auto-publishing in<br /><span id="showplan-publish-countdown">00:30:00</span></p>
+			<a href="<?php echo \Showplan\Frontend::nonce_url('./admin.php?page=showplan-show-times&action=compile&return=' . urlencode($_term->id), 'showplan-compile', 'k'); ?>" class="button" style="float: left; margin-right: 5px;">Publish</a> <p style="margin: -5px 0 0 0; font-size: 9pt;">Auto-publishing in<br /><span id="showplan-publish-countdown">00:30:00</span></p>
 
 			<div id="showplan-tools-assign" style="display: none">
 

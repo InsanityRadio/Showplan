@@ -90,7 +90,7 @@ class Overrides extends Controller {
 		<h2>Edit Overrides: <b><?php echo esc_html($_station->reference); ?></b> <?php echo $this->selector(); ?></h2>
 		<div class="showplan-tools">
 
-			<a href="<?php echo \Showplan\Frontend::nonce_url('./admin.php?page=showplan-show-times&action=compile', 'showplan-compile', 'k'); ?>" class="button" style="float: left; margin-right: 5px;">Publish</a> <p style="margin: -5px 0 0 0; font-size: 9pt;">Auto-publishing in<br /><span id="showplan-publish-countdown">00:30:00</span></p>
+			<a href="<?php echo \Showplan\Frontend::nonce_url('./admin.php?page=showplan-show-times&action=compile&isoverrides=1', 'showplan-compile', 'k'); ?>" class="button" style="float: left; margin-right: 5px;">Publish</a> <p style="margin: -5px 0 0 0; font-size: 9pt;">Auto-publishing in<br /><span id="showplan-publish-countdown">00:30:00</span></p>
 
 			<div id="showplan-tools-assign" style="display: none">
 

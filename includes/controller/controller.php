@@ -6,7 +6,7 @@ namespace Showplan\Controller;
  */
 abstract class Controller {
 
-	private $path;
+	protected $path;
 
 	public function __construct ($path) {
 		$this->path = $path;
@@ -20,7 +20,11 @@ abstract class Controller {
 		// $_POST = array_map('stripslashes_deep', $_POST);
 
 		if (method_exists($this, $_type . '_' . $_action)) {
-			call_user_func(array($this, $_type . '_' . $_action));
+			try {
+				call_user_func(array($this, $_type . '_' . $_action));
+			} catch (\Exception $e) {
+				wp_die("Fatal error: " . $e->getMessage());
+			}
 		} else {
 			$this->render_home();
 		}
@@ -32,7 +36,8 @@ abstract class Controller {
 	}
 
 	public function get_uri ($_action = true) {
-		return './admin.php?page=' . $this->path . ($_action ? '&action=' . $this->get_action() : '');
+		$_ret_id = $_GET['return'];
+		return './admin.php?page=' . $this->path . ($_action ? '&action=' . $this->get_action() : '') . ($_ret_id ? '&id=' . urlencode($_ret_id) : '');
 	}
 
 	abstract public function render_home ();

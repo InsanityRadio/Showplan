@@ -53,7 +53,7 @@ class Term extends Model {
 		
 		$time = strtoutctime($time);
 		$open = array_filter(self::open_between($time, $time), function ($a) { return $a->id != $this->id; });
-		if (count($_open)) {
+		if (count($open)) {
 			throw new Exception('Cannot have overlapping terms');
 		}
 		if (($time % 86400) != 0) {
@@ -68,7 +68,7 @@ class Term extends Model {
 		$_converted_time = strtoutctime($time);
 
 		$open = array_filter(self::open_between($_converted_time, $_convertedtime), function ($a) { return $a->id != $this->id; });
-		if (count($_open)) {
+		if (count($open)) {
 			throw new Exception('Cannot have overlapping terms');
 		}
 
